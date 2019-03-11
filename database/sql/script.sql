@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema Post_db
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema Post_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `Post_db` DEFAULT CHARACTER SET utf8 ;
+USE `Post_db` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Post`
+-- Table `Post_db`.`Post`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Post` (
+CREATE TABLE IF NOT EXISTS `Post_db`.`Post` (
   `id_post` INT NOT NULL AUTO_INCREMENT,
   `message` VARCHAR(270) NULL,
   `path_imagen` VARCHAR(45) NULL,
@@ -33,9 +33,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Comment`
+-- Table `Post_db`.`Comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Comment` (
+CREATE TABLE IF NOT EXISTS `Post_db`.`Comment` (
   `idComment` INT NOT NULL,
   `message` VARCHAR(270) NULL,
   `Publicacion_idPublicacion` INT NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Comment` (
   INDEX `fk_Comentario_Publicacion_idx` (`Publicacion_idPublicacion` ASC),
   CONSTRAINT `fk_Comentario_Publicacion`
     FOREIGN KEY (`Publicacion_idPublicacion`)
-    REFERENCES `mydb`.`Post` (`id_post`)
+    REFERENCES `Post_db`.`Post` (`id_post`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
