@@ -5,6 +5,9 @@
  */
 package GUIs;
 
+import java.awt.Color;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Absalom Herrera
@@ -15,7 +18,11 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         initComponents();
+        this.pack();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -31,6 +38,7 @@ public class Login extends javax.swing.JFrame {
         userLabel = new javax.swing.JLabel();
         userTextField = new javax.swing.JTextField();
         loginButton = new javax.swing.JToggleButton();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -38,13 +46,12 @@ public class Login extends javax.swing.JFrame {
 
         userLabel.setText("Choose a username:");
 
-        userTextField.addActionListener(new java.awt.event.ActionListener() {
+        loginButton.setText("Let me post!");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userTextFieldActionPerformed(evt);
+                loginButtonActionPerformed(evt);
             }
         });
-
-        loginButton.setText("Let me post!");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,10 +66,12 @@ public class Login extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(userLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(loginButton)
+                            .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(loginButton)))
+                        .addGap(125, 125, 125)
+                        .addComponent(errorLabel)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -74,7 +83,9 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userLabel)
                     .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(errorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loginButton)
                 .addContainerGap())
         );
@@ -82,9 +93,19 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void userTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userTextFieldActionPerformed
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        String username = userTextField.getText();
+        if (!username.equals("")){
+            ClientMainGUI c = new ClientMainGUI(username);
+            c.setVisible(true);
+            this.dispose();
+        }else {
+            errorLabel.setForeground(Color.red);
+            errorLabel.setText("User cannot be empty!");
+            loginButton.setSelected(false);
+        }
+        
+    }//GEN-LAST:event_loginButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,6 +143,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JToggleButton loginButton;
     private javax.swing.JLabel userLabel;
     private javax.swing.JTextField userTextField;
