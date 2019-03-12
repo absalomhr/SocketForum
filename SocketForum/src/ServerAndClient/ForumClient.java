@@ -2,8 +2,10 @@ package ServerAndClient;
 
 import DTO.Option;
 import DTO.Post;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 /**
  *
@@ -20,8 +22,7 @@ public class ForumClient {
         port = 1234;
     }
 
-    public void createPost(Post p) {
-        
+    public void createPostWithoutImage(Post p) {
         try {
             so = new Socket(host, port);
 
@@ -44,5 +45,25 @@ public class ForumClient {
             System.err.println("CREATE POST CL ERROR");
             ex.printStackTrace();
         }
+    }
+    
+    public List getAllPost(){
+        try{
+            so = new Socket(host, port);
+
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
+            
+            // Option: 1 = get all posts
+            oosToServer.writeObject(new Option(1));
+            
+            List l = null;
+            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
+            l = (List) oisFromServer.readObject();
+             return l;
+        }catch (Exception ex){
+            System.err.println("GET ALL POST CL ERROR");
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

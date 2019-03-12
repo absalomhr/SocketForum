@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,6 +17,7 @@ import java.sql.SQLException;
 public class ForumDAO {
     private Connection con;
     private static final String SQL_NEW_POST = "insert into post (message, path_img, user, date, topic, title) values (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_SELECT_ALL_POST = "select * from post";
     
     public void createPost (Post p) throws SQLException{
         getConnection();
@@ -31,6 +35,43 @@ public class ForumDAO {
             ps.close();
             con.close();
         }
+    }
+    
+    
+    public List getAllPost () throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SELECT_ALL_POST);
+            rs = ps.executeQuery();
+            List results = getPostResults (rs);
+            if (results.size() > 0) {
+                return results;
+            } else {
+                return null;
+            }
+        } finally {
+            rs.close();
+            ps.close();
+            con.close();
+        }
+    }
+    
+    private List getPostResults (ResultSet rs) throws SQLException{
+        List results = new ArrayList();
+        while (rs.next()){
+            Post p = new Post();
+            p.setIdpost(rs.getInt("id_post"));
+            p.setDate(rs.getDate("date"));
+            p.setMessage(rs.getString("message"));
+            p.setPath_img(rs.getString("path_img"));
+            p.setUser(rs.getString("user"));
+            p.setTopic(rs.getString("topic"));
+            p.setTitle(rs.getString("title"));
+            results.add(p);
+        }
+        return results;
     }
     
     private void getConnection() {

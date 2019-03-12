@@ -4,7 +4,9 @@ import DAO.ForumDAO;
 import DTO.Option;
 import DTO.Post;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 /**
  *
@@ -31,6 +33,8 @@ public class ServerForumThread implements Runnable {
             // 0 = create post without image
             if (opt.getOption() == 0) {
                 createPostNoImage();
+            } else if (opt.getOption() == 1){
+                getAllPost();
             }
         } catch (Exception ex) {
             System.err.println("GET CLIENT OPTION ERROR");
@@ -47,6 +51,20 @@ public class ServerForumThread implements Runnable {
             fdao.createPost(p);
         } catch (Exception ex) {
             System.err.println("CREATE POST SERVER ERROR");
+            ex.printStackTrace();
+        }
+    }
+    
+    public void getAllPost () {
+        System.out.println("Getting all posts server thread");
+        ForumDAO fdao = new ForumDAO();
+        List l = null;
+        try{
+            l = fdao.getAllPost();
+            ObjectOutputStream ousToClient = new ObjectOutputStream(cl.getOutputStream());
+            ousToClient.writeObject(l);
+        }catch(Exception ex){
+            System.err.println("GET ALL POST SERVER ERROR");
             ex.printStackTrace();
         }
     }

@@ -1,5 +1,8 @@
 package GUIs;
 
+import DTO.Post;
+import ServerAndClient.ForumClient;
+import java.util.List;
 import javax.swing.JFrame;
 
 /**
@@ -20,6 +23,8 @@ public class ClientMainGUI extends javax.swing.JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         welcomeLabel.setText("Welcome " + user + "!");
+        // We call this method to obtain 
+        getAllPost();
     }
 
     /**
@@ -94,6 +99,20 @@ public class ClientMainGUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_createPostButtonActionPerformed
 
+    private void getAllPost(){
+        ForumClient fc = new ForumClient();
+        List l = null;
+        l = fc.getAllPost();
+        if (l != null){
+            for (int i = 0; i < l.size(); i++) {
+                Post p = (Post) l.get(i);
+                System.out.println(p.toString());
+            }            
+        }
+        else {
+            System.err.println("NULL POSTS");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createPostButton;

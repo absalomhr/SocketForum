@@ -54,3 +54,12 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+/* Populate database with test posts */
+
+insert into post (message, path_img, user, topic, title) values ("msg1", "path1", "user1", "topic1", "title1");
+insert into post (message, path_img, user, topic, title) values ("msg2", "path2", "user2", "topic2", "title2");
+insert into post (message, path_img, user, topic, title) values ("msg3", "path3", "user3", "topic3", "title3");
+insert into post (message, path_img, user, topic, title) values ("msg4", "path4", "user4", "topic4", "title4");
+insert into post (message, path_img, user, topic, title) values ("msg5", "path5", "user5", "topic5", "title5");

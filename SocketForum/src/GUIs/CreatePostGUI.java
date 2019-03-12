@@ -118,7 +118,7 @@ public class CreatePostGUI extends javax.swing.JFrame {
         p.setTopic(topicTextField.getText());
         p.setUser(user);
         ForumClient fc = new ForumClient();
-        fc.createPost(p);
+        fc.createPostWithoutImage(p);
     }//GEN-LAST:event_postButtonActionPerformed
 
 
