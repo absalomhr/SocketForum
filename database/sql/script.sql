@@ -23,7 +23,7 @@ USE `Post_db` ;
 CREATE TABLE IF NOT EXISTS `Post_db`.`Post` (
   `id_post` INT NOT NULL AUTO_INCREMENT,
   `message` VARCHAR(270) NULL,
-  `path_img` VARCHAR(45) NULL,
+  `path_img` VARCHAR(150) NULL,
   `user` VARCHAR(45) NULL,
   `date` DATE NULL,
   `topic` VARCHAR(45) NULL,
