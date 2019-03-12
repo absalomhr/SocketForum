@@ -7,7 +7,8 @@ import java.util.Date;
  *
  * @author Absalom Herrera
  */
-public class Post implements Serializable{
+public class Post implements Serializable {
+
     private String user, message, path_img, topic, title;
     private Date date;
     private int idpost;

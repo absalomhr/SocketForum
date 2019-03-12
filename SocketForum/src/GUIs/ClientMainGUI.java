@@ -33,6 +33,7 @@ public class ClientMainGUI extends javax.swing.JFrame {
 
         welcomeLabel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
+        createPostButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,15 +44,27 @@ public class ClientMainGUI extends javax.swing.JFrame {
             }
         });
 
+        createPostButton.setText("Create Post");
+        createPostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createPostButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(welcomeLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
-                .addComponent(logoutButton)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(createPostButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(welcomeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
+                        .addComponent(logoutButton)))
                 .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
@@ -61,7 +74,9 @@ public class ClientMainGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(logoutButton)
                     .addComponent(welcomeLabel))
-                .addContainerGap(277, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(createPostButton)
+                .addContainerGap(216, Short.MAX_VALUE))
         );
 
         pack();
@@ -73,8 +88,15 @@ public class ClientMainGUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_logoutButtonActionPerformed
 
+    private void createPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPostButtonActionPerformed
+        CreatePostGUI cpg = new CreatePostGUI(user);
+        cpg.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_createPostButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton createPostButton;
     private javax.swing.JButton logoutButton;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
