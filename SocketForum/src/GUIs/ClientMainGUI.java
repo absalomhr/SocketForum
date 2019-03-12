@@ -4,6 +4,11 @@ import DTO.Post;
 import ServerAndClient.ForumClient;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 /**
  *
@@ -12,19 +17,59 @@ import javax.swing.JFrame;
 public class ClientMainGUI extends javax.swing.JFrame {
 
     private String user;
+
     /**
      * Creates new form ClientMainGUI
      */
     public ClientMainGUI(String user) {
+        this.setTitle(" - Discussion Forum - ");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.user = user;
         initComponents();
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            SwingUtilities.updateComponentTreeUI(this);
+        } catch (Exception e) {
+        }
         this.pack();
         this.setLocationRelativeTo(null);
         welcomeLabel.setText("Welcome " + user + "!");
+        loadWindowHTML();
         // We call this method to obtain 
-        getAllPost();
+        //getAllPost();
+    }
+
+    public void loadWindowHTML() {
+        editorPane.setEditable(false);
+        HTMLEditorKit kit = new HTMLEditorKit();
+        editorPane.setEditorKit(kit);
+        StyleSheet styleSheet = kit.getStyleSheet();
+        styleSheet.addRule("body{background-color: #87CEFA;}");
+        styleSheet.addRule("h1,h3 {font-family: Arial, Helvetica, sans-serif; color: white;}");
+        String htmlString = "<!DOCTYPE html>\n" +
+"<html>\n" +
+"<head>\n" +
+"	<title>Discussion Forum</title>\n" +
+"	<meta charset=\"utf-8\">\n" +
+"	<style type=\"text/css\">\n" +
+"		body{\n" +
+"			background-color: #87CEFA;\n" +
+"		}\n" +
+"		h1,h3{\n" +
+"			font-family: Arial, Helvetica, sans-serif;\n" +
+"			color: white;\n" +
+"		}\n" +
+"	</style>\n" +
+"</head>\n" +
+"<body>\n" +
+"	<h1 align=\"center\">Discussion Forum</h1>\n" +
+"    <h3 align=\"center\">Post Here</h3>\n" +
+"</body>\n" +
+"</html>";
+        Document doc = kit.createDefaultDocument();
+        editorPane.setDocument(doc);
+        editorPane.setText(htmlString);
     }
 
     /**
@@ -39,6 +84,8 @@ public class ClientMainGUI extends javax.swing.JFrame {
         welcomeLabel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
         createPostButton = new javax.swing.JButton();
+        scrollPane = new javax.swing.JScrollPane();
+        editorPane = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,32 +103,37 @@ public class ClientMainGUI extends javax.swing.JFrame {
             }
         });
 
+        scrollPane.setViewportView(editorPane);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(createPostButton))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(welcomeLabel)
+                            .addComponent(createPostButton))
+                        .addContainerGap(13, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(welcomeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
-                        .addComponent(logoutButton)))
-                .addGap(21, 21, 21))
+                        .addGap(32, 32, 32)
+                        .addComponent(logoutButton)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(logoutButton)
-                    .addComponent(welcomeLabel))
-                .addGap(29, 29, 29)
+                .addComponent(welcomeLabel)
+                .addGap(90, 90, 90)
+                .addComponent(logoutButton)
+                .addGap(30, 30, 30)
                 .addComponent(createPostButton)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
+            .addComponent(scrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -99,24 +151,25 @@ public class ClientMainGUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_createPostButtonActionPerformed
 
-    private void getAllPost(){
+    private void getAllPost() {
         ForumClient fc = new ForumClient();
         List l = null;
         l = fc.getAllPost();
-        if (l != null){
+        if (l != null) {
             for (int i = 0; i < l.size(); i++) {
                 Post p = (Post) l.get(i);
                 System.out.println(p.toString());
-            }            
-        }
-        else {
+            }
+        } else {
             System.err.println("NULL POSTS");
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createPostButton;
+    private javax.swing.JEditorPane editorPane;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
