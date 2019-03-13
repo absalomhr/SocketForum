@@ -7,6 +7,8 @@ package GUIs;
 
 import DTO.Post;
 import ServerAndClient.ForumClient;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  *
@@ -15,6 +17,7 @@ import ServerAndClient.ForumClient;
 public class CreatePostGUI extends javax.swing.JFrame {
 
     private String user;
+
     /**
      * Creates new form CreatePostGUI
      */
@@ -23,6 +26,12 @@ public class CreatePostGUI extends javax.swing.JFrame {
         // TODO: Style, Non empty fields, image attachment and no image recognition, cancel button, date
         // TODO2: letting know client that the post have been added, exiting this GUI back to main
         initComponents();
+        this.setLocationRelativeTo(null);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            SwingUtilities.updateComponentTreeUI(this);
+        } catch (Exception e) {
+        }
     }
 
     /**

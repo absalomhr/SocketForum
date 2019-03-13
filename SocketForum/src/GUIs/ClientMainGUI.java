@@ -47,26 +47,26 @@ public class ClientMainGUI extends javax.swing.JFrame {
         StyleSheet styleSheet = kit.getStyleSheet();
         styleSheet.addRule("body{background-color: #87CEFA;}");
         styleSheet.addRule("h1,h3 {font-family: Arial, Helvetica, sans-serif; color: white;}");
-        String htmlString = "<!DOCTYPE html>\n" +
-"<html>\n" +
-"<head>\n" +
-"	<title>Discussion Forum</title>\n" +
-"	<meta charset=\"utf-8\">\n" +
-"	<style type=\"text/css\">\n" +
-"		body{\n" +
-"			background-color: #87CEFA;\n" +
-"		}\n" +
-"		h1,h3{\n" +
-"			font-family: Arial, Helvetica, sans-serif;\n" +
-"			color: white;\n" +
-"		}\n" +
-"	</style>\n" +
-"</head>\n" +
-"<body>\n" +
-"	<h1 align=\"center\">Discussion Forum</h1>\n" +
-"    <h3 align=\"center\">Post Here</h3>\n" +
-"</body>\n" +
-"</html>";
+        String htmlString = "<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "<head>\n"
+                + "	<title>Discussion Forum</title>\n"
+                + "	<meta charset=\"utf-8\">\n"
+                + "	<style type=\"text/css\">\n"
+                + "		body{\n"
+                + "			background-color: #87CEFA;\n"
+                + "		}\n"
+                + "		h1,h3{\n"
+                + "			font-family: Arial, Helvetica, sans-serif;\n"
+                + "			color: white;\n"
+                + "		}\n"
+                + "	</style>\n"
+                + "</head>\n"
+                + "<body>\n"
+                + "	<h1 align=\"center\">Discussion Forum</h1>\n"
+                + "    <h3 align=\"center\">Post Here</h3>\n"
+                + "</body>\n"
+                + "</html>";
         Document doc = kit.createDefaultDocument();
         editorPane.setDocument(doc);
         editorPane.setText(htmlString);
@@ -88,6 +88,8 @@ public class ClientMainGUI extends javax.swing.JFrame {
         editorPane = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        welcomeLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
 
         logoutButton.setText("Logout");
         logoutButton.addActionListener(new java.awt.event.ActionListener() {
