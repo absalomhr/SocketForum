@@ -17,6 +17,7 @@ import javax.swing.text.html.StyleSheet;
 public class ClientMainGUI extends javax.swing.JFrame {
 
     private String user;
+    private ForumClient fc;
 
     /**
      * Creates new form ClientMainGUI
@@ -38,6 +39,10 @@ public class ClientMainGUI extends javax.swing.JFrame {
         loadWindowHTML();
         // We call this method to obtain 
         //getAllPost();
+        
+        
+        // unique client instance
+        fc = new ForumClient();
     }
 
     public void loadWindowHTML() {

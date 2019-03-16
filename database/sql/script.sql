@@ -38,13 +38,13 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Post_db`.`Comment` (
   `idComment` INT NOT NULL,
   `message` VARCHAR(270) NULL,
-  `Publicacion_idPublicacion` INT NOT NULL,
-  `usuario` VARCHAR(45) NULL,
-  `fecha` DATE NULL,
-  PRIMARY KEY (`idComment`, `Publicacion_idPublicacion`),
-  INDEX `fk_Comentario_Publicacion_idx` (`Publicacion_idPublicacion` ASC),
+  `id_post` INT NOT NULL,
+  `user` VARCHAR(45) NULL,
+  `date` DATE NULL,
+  PRIMARY KEY (`idComment`, `id_post`),
+  INDEX `fk_Comentario_Publicacion_idx` (`id_post` ASC),
   CONSTRAINT `fk_Comentario_Publicacion`
-    FOREIGN KEY (`Publicacion_idPublicacion`)
+    FOREIGN KEY (`id_post`)
     REFERENCES `Post_db`.`Post` (`id_post`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

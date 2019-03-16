@@ -16,17 +16,25 @@ public class ForumClient {
     private Socket so;
     private int port;
     private String host;
+    private ObjectOutputStream oosToServer;
+    private ObjectInputStream oisFromServer;
 
     public ForumClient() {
         host = "127.0.0.1";
         port = 1234;
+        try{
+            // Server instance for all the duration of the connection
+            so = new Socket(host, port);
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
+            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
+        }catch (Exception ex){
+            System.err.println("CL CONSTRUCTOR ERROR");
+            ex.printStackTrace();
+        }
     }
 
     public void createPostWithoutImage(Post p) {
         try {
-            so = new Socket(host, port);
-
-            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
             // title, msg, user, topic and date can't be empty strings (null)
             // that must be checked in the GUI. But an image it's not required
             if (p.getPath_img() == null) {
@@ -49,15 +57,9 @@ public class ForumClient {
     
     public List getAllPost(){
         try{
-            so = new Socket(host, port);
-
-            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
-            
             // Option: 1 = get all posts
             oosToServer.writeObject(new Option(1));
-            
             List l = null;
-            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
             l = (List) oisFromServer.readObject();
              return l;
         }catch (Exception ex){

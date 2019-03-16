@@ -1,5 +1,6 @@
 package DAO;
 
+import DTO.Comment;
 import DTO.Post;
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,6 +19,7 @@ public class ForumDAO {
     private Connection con;
     private static final String SQL_NEW_POST = "insert into post (message, path_img, user, date, topic, title) values (?, ?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_ALL_POST = "select * from post";
+    private static final String SQL_SELECT_COMMENTS = "select * from comment where id_post = ?";
     
     public void createPost (Post p) throws SQLException{
         getConnection();
@@ -58,6 +60,27 @@ public class ForumDAO {
         }
     }
     
+    public List getComments (Post p) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SELECT_COMMENTS);
+            ps.setInt(1, p.getIdpost());
+            rs = ps.executeQuery();
+            List results = getPostResults (rs);
+            if (results.size() > 0) {
+                return results;
+            } else {
+                return null;
+            }
+        } finally {
+            rs.close();
+            ps.close();
+            con.close();
+        }
+    }
+    
     private List getPostResults (ResultSet rs) throws SQLException{
         List results = new ArrayList();
         while (rs.next()){
@@ -74,9 +97,24 @@ public class ForumDAO {
         return results;
     }
     
+    private List getCommentResults (ResultSet rs) throws SQLException{
+        List results = new ArrayList();
+        while (rs.next()){
+            Comment c = new Comment();
+            c.setDate(rs.getDate("date"));
+            c.setIdComment(rs.getInt("idComment"));
+            c.setId_post(rs.getInt("id_psot"));
+            c.setMessage(rs.getString("message"));
+            c.setUser(rs.getString("user"));
+            results.add(c);
+        }
+        return results;
+    }
+    
     private void getConnection() {
         String user = "root";
-        String pwd = "ale970807";
+        String pwd = "absalom94";
+        //String pwd = "ale970807";
         String url = "jdbc:mysql://localhost:3306/Post_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
         String mySqlDriver = "com.mysql.jdbc.Driver";
         try {

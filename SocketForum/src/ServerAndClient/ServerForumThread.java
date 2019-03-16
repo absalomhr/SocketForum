@@ -16,25 +16,34 @@ public class ServerForumThread implements Runnable {
 
     private Socket cl;
     private ObjectInputStream oisFromClient;
+    private ObjectOutputStream ousToClient;
     // The server will read the option and then execute the needed method
     private Option opt;
 
     public ServerForumThread(Socket cl) {
         this.cl = cl;
+        try{
+            oisFromClient = new ObjectInputStream(cl.getInputStream());
+            ousToClient = new ObjectOutputStream(cl.getOutputStream());
+        }catch(Exception ex){
+            System.err.println("SERVER CONSTRUCTOR ERROR");
+            ex.printStackTrace();
+        }      
     }
 
     private void getClientOption() {
         try {
-            System.out.println("Getting client option");
-            oisFromClient = new ObjectInputStream(cl.getInputStream());
-            opt = (Option) oisFromClient.readObject();
-            // Here the server calls the required method
-
-            // 0 = create post without image
-            if (opt.getOption() == 0) {
-                createPostNoImage();
-            } else if (opt.getOption() == 1){
-                getAllPost();
+            for(;;){
+                System.out.println("Getting client option");
+                opt = (Option) oisFromClient.readObject();
+                // Here the server calls the required method
+                // 0 = create post without image
+                // 1 = get all posts
+                if (opt.getOption() == 0) {
+                    createPostNoImage();
+                } else if (opt.getOption() == 1) {
+                    getAllPost();
+                }
             }
         } catch (Exception ex) {
             System.err.println("GET CLIENT OPTION ERROR");
@@ -61,10 +70,23 @@ public class ServerForumThread implements Runnable {
         List l = null;
         try{
             l = fdao.getAllPost();
-            ObjectOutputStream ousToClient = new ObjectOutputStream(cl.getOutputStream());
             ousToClient.writeObject(l);
         }catch(Exception ex){
             System.err.println("GET ALL POST SERVER ERROR");
+            ex.printStackTrace();
+        }
+    }
+    
+    public void getComments (){
+        List l = null;
+        ForumDAO fdao = new ForumDAO();
+        Post p;
+        try{
+            p = (Post) oisFromClient.readObject();
+            l = fdao.getComments(p);
+            ousToClient.writeObject(l);
+        }catch (Exception ex){
+            System.err.println("GET COMMENT SERVER ERROR");
             ex.printStackTrace();
         }
     }
