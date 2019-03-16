@@ -3,7 +3,6 @@ package DAO;
 import DTO.Comment;
 import DTO.Post;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +28,7 @@ public class ForumDAO {
             ps.setString(1, p.getMessage());
             ps.setString(2, p.getPath_img());
             ps.setString(3, p.getUser());
-            ps.setDate(4, (Date) p.getDate());
+            ps.setDate(4, p.getDate());
             ps.setString(5, p.getTopic());
             ps.setString(6, p.getTitle());
             ps.executeUpdate();
@@ -68,7 +67,7 @@ public class ForumDAO {
             ps = con.prepareStatement(SQL_SELECT_COMMENTS);
             ps.setInt(1, p.getIdpost());
             rs = ps.executeQuery();
-            List results = getPostResults (rs);
+            List results = getCommentResults (rs);
             if (results.size() > 0) {
                 return results;
             } else {

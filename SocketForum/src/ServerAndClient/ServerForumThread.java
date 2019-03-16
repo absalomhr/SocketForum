@@ -3,9 +3,16 @@ package ServerAndClient;
 import DAO.ForumDAO;
 import DTO.Option;
 import DTO.Post;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -17,30 +24,31 @@ public class ServerForumThread implements Runnable {
     private Socket cl;
     private ObjectInputStream oisFromClient;
     private ObjectOutputStream ousToClient;
+    private String serverRoute = "C:\\Users\\elpat\\Documents\\ServerForum";
     // The server will read the option and then execute the needed method
     private Option opt;
 
     public ServerForumThread(Socket cl) {
         this.cl = cl;
-        try{
+        try {
             oisFromClient = new ObjectInputStream(cl.getInputStream());
             ousToClient = new ObjectOutputStream(cl.getOutputStream());
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("SERVER CONSTRUCTOR ERROR");
             ex.printStackTrace();
-        }      
+        }
     }
 
     private void getClientOption() {
         try {
-            for(;;){
+            for (;;) {
                 System.out.println("Getting client option");
                 opt = (Option) oisFromClient.readObject();
                 // Here the server calls the required method
                 // 0 = create post without image
                 // 1 = get all posts
                 if (opt.getOption() == 0) {
-                    createPostNoImage();
+                    createPost();
                 } else if (opt.getOption() == 1) {
                     getAllPost();
                 }
@@ -51,44 +59,83 @@ public class ServerForumThread implements Runnable {
         }
     }
 
-    public void createPostNoImage() {
-        System.out.println("Creating post without image");
+    public void createPost() {
+        System.out.println("CREATING POST");
         ForumDAO fdao = new ForumDAO();
         Post p = new Post();
         try {
             p = (Post) oisFromClient.readObject();
-            fdao.createPost(p);
+            if (p.getPath_img() == null) { // No image
+                fdao.createPost(p);
+            } else { // Image
+                if (!Files.isDirectory(Paths.get(serverRoute + "\\" + p.getDate().toString()))) { // Check if directory exists
+                    new File(serverRoute + "\\" + p.getDate().toString()).mkdir();
+                }
+                ServerSocket imageSocket = new ServerSocket(1235);
+                Socket cl2 = imageSocket.accept();
+                DataInputStream disFromCl = new DataInputStream(cl2.getInputStream());
+
+                long fileSize = disFromCl.readLong();
+                String fileName = disFromCl.readUTF();
+                String filePath = serverRoute + "\\" + p.getDate().toString() + "\\" + fileName;
+                DataOutputStream dosToFile = new DataOutputStream(new FileOutputStream(filePath));
+
+                long r = 0;
+                int n = 0, percent = 0;
+                while (r < fileSize) {
+                    byte[] b = new byte[1500];
+                    n = disFromCl.read(b);
+                    dosToFile.write(b, 0, n);
+                    dosToFile.flush();
+                    r += n;
+                    percent = (int) ((r * 100) / fileSize);
+                    System.out.print("\rRECEIVING: " + percent + "%");
+                }
+                dosToFile.close();
+                disFromCl.close();
+                cl2.close();
+                imageSocket.close();
+                p.setPath_img(filePath);
+                fdao.createPost(p);
+            }
+
         } catch (Exception ex) {
             System.err.println("CREATE POST SERVER ERROR");
             ex.printStackTrace();
         }
     }
-    
-    public void getAllPost () {
+
+    public void getAllPost() {
         System.out.println("Getting all posts server thread");
         ForumDAO fdao = new ForumDAO();
         List l = null;
-        try{
+        try {
             l = fdao.getAllPost();
+            if (l != null){
+                for (Object o : l){
+                    Post p = (Post) o;
+                    List coms = getComments(p);
+                    p.setComments(coms);
+                }
+            }
             ousToClient.writeObject(l);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("GET ALL POST SERVER ERROR");
             ex.printStackTrace();
         }
     }
-    
-    public void getComments (){
+
+    public List getComments(Post p) {
         List l = null;
         ForumDAO fdao = new ForumDAO();
-        Post p;
-        try{
-            p = (Post) oisFromClient.readObject();
+        try {
             l = fdao.getComments(p);
-            ousToClient.writeObject(l);
-        }catch (Exception ex){
+            return l;
+        } catch (Exception ex) {
             System.err.println("GET COMMENT SERVER ERROR");
             ex.printStackTrace();
         }
+        return l;
     }
 
     @Override

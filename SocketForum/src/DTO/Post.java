@@ -1,7 +1,9 @@
 package DTO;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
+
 
 /**
  *
@@ -12,6 +14,7 @@ public class Post implements Serializable {
     private String user, message, path_img, topic, title;
     private Date date;
     private int idpost;
+    private List comments;
 
     public Post() {
     }
@@ -72,8 +75,18 @@ public class Post implements Serializable {
         this.idpost = idpost;
     }
 
+    public List getComments() {
+        return comments;
+    }
+
+    public void setComments(List comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
-        return "Post{" + "user=" + user + ", message=" + message + ", path_img=" + path_img + ", topic=" + topic + ", title=" + title + ", date=" + date + ", idpost=" + idpost + '}';
+        return "Post{" + "user=" + user + ", message=" + message + ", path_img=" + path_img + ", topic=" + topic + ", title=" + title + ", date=" + date + ", idpost=" + idpost + ", comments=" + comments + '}';
     }
+
+    
 }
