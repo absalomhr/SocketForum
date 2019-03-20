@@ -2,6 +2,7 @@ package GUIs;
 
 import DTO.Post;
 import ServerAndClient.ForumClient;
+import ServerAndClient.UpdateListener;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -18,6 +19,7 @@ public class ClientMainGUI extends javax.swing.JFrame {
 
     private String user;
     private ForumClient fc;
+    private int listenerPort = 65535;
 
     /**
      * Creates new form ClientMainGUI
@@ -31,14 +33,21 @@ public class ClientMainGUI extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.updateComponentTreeUI(this);
+            
+            ForumClient fc = new ForumClient();
+            
+            UpdateListener ul = new UpdateListener(this, listenerPort);
+            Thread t = new Thread(ul);
+            t.start();
+            
         } catch (Exception e) {
         }
         this.pack();
         this.setLocationRelativeTo(null);
         welcomeLabel.setText("Welcome " + user + "!");
         loadWindowHTML();
-        // We call this method to obtain 
-        //getAllPost();
+        // We call this method to obtain posts
+        getAllPost();
         
         
         // unique client instance
@@ -153,25 +162,25 @@ public class ClientMainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void createPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPostButtonActionPerformed
-        CreatePostGUI cpg = new CreatePostGUI(user);
+        CreatePostGUI cpg = new CreatePostGUI(user, this);
+        this.setVisible(false);
         cpg.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_createPostButtonActionPerformed
 
-    private void getAllPost() {
+    public void getAllPost() {
         ForumClient fc = new ForumClient();
         List l = null;
         l = fc.getAllPost();
         if (l != null) {
             for (int i = 0; i < l.size(); i++) {
                 Post p = (Post) l.get(i);
-                System.out.println(p.toString());
+                System.out.println("\n" + p.toString());
             }
         } else {
             System.err.println("NULL POSTS");
         }
-    }
-
+    }    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createPostButton;
     private javax.swing.JEditorPane editorPane;

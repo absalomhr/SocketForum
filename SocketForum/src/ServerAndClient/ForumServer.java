@@ -14,8 +14,7 @@ public class ForumServer {
 
     public ForumServer() {
         // Creating server
-    port = 1025;
-
+        port = 1025;
         try {
             s = new ServerSocket(port);
             s.setReuseAddress(true);
@@ -33,7 +32,7 @@ public class ForumServer {
                 Socket cl = s.accept();
                 Thread t = new Thread(new ServerForumThread(cl, ++port));
                 t.start();
-                
+
             }
         } catch (Exception ex) {
             System.err.println("SERVER CONNECT ERROR");

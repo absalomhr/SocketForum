@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -51,6 +54,7 @@ public class ServerForumThread implements Runnable {
                 getAllPost();
             } else if (opt.getOption() == 2){
                 createComment();
+            } else if  (opt.getOption() == 3){
             }
             oisFromClient.close();
             cl.close();
@@ -104,6 +108,15 @@ public class ServerForumThread implements Runnable {
                 p.setPath_img(filePath);
                 fdao.createPost(p);
             }
+            // updates feeds of connected clients
+            MulticastSocket sender = new MulticastSocket();
+
+            byte[] data = new byte[]{0};
+
+            DatagramPacket dgp = new DatagramPacket(data, data.length, InetAddress.getByName("230.0.0.1"), 65535);
+
+            // sending notification, a new post has been made!
+            sender.send(dgp);
 
         } catch (Exception ex) {
             System.err.println("CREATE POST SERVER ERROR");
@@ -164,7 +177,7 @@ public class ServerForumThread implements Runnable {
     public void run() {
         System.out.println("IN THREAD: CL ADDR: " + cl.getInetAddress() + " CL PORT: " + cl.getPort());
         getClientOption();
-        System.err.println("EXITING THREAD");
+        System.out.println("EXITING THREAD");
     }
 
 }

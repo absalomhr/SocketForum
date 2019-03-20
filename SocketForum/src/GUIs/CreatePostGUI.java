@@ -17,12 +17,13 @@ import javax.swing.UIManager;
 public class CreatePostGUI extends javax.swing.JFrame {
 
     private String user;
-
+    private ClientMainGUI cmg;
     /**
      * Creates new form CreatePostGUI
      */
-    public CreatePostGUI(String user) {
+    public CreatePostGUI(String user, ClientMainGUI cmg) {
         this.user = user;
+        this.cmg = cmg;
         // TODO: Style, Non empty fields, image attachment and no image recognition, cancel button, date
         // TODO2: letting know client that the post have been added, exiting this GUI back to main
         initComponents();
@@ -128,6 +129,8 @@ public class CreatePostGUI extends javax.swing.JFrame {
         p.setUser(user);
         ForumClient fc = new ForumClient();
         fc.createPost(p);
+        cmg.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_postButtonActionPerformed
 
 
