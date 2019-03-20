@@ -1,5 +1,6 @@
 package ServerAndClient;
 
+import DTO.Comment;
 import DTO.Option;
 import DTO.Post;
 import java.io.DataInputStream;
@@ -17,45 +18,36 @@ import java.util.List;
  */
 public class ForumClient {
 
-    private Socket so;
     private int port;
     private String host;
-    private ObjectOutputStream oosToServer = null;
-    private ObjectInputStream oisFromServer = null;
 
     public ForumClient() {
         host = "127.0.0.1";
-        port = 1234;
-        try{
-            // Server instance for all the duration of the connection
-            so = new Socket(host, port);
-            //ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
-            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
-            if (oosToServer != null)
-                System.out.println("FLUJO CREADO");
-            
-        }catch (Exception ex){
-            System.err.println("CL CONSTRUCTOR ERROR");
-            ex.printStackTrace();
-        }
+        port = 1025;
     }
 
     public void createPost(Post p) {
-        if (oosToServer != null)
-                System.out.println("FLUJO METODO NICE");
-        if (oosToServer == null)
-                System.out.println("FLUJO METODO NULO");
-        try {
-            // title, msg, user, topic and date can't be empty strings (null)
-            // that must be checked in the GUI. But an image it's not required
+        try { 
+            Socket so = new Socket(host, port);
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
 
             // Sending option to server: 0 = create post
             oosToServer.writeObject(new Option(0));
+            // title, msg, user, topic and date can't be empty strings (null)
+            // that must be checked in the GUI. But an image it's not required
+            
+            // Receiving port number for image upload
+            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
+            Option op = (Option) oisFromServer.readObject();
+            
+            // System.out.println("port received:  " + op.getOption());
+            
             // Sendig the post to be uploaded
             oosToServer.writeObject(p);
+            
             if (p.getPath_img() != null) {
-                
-                Socket so1 = new Socket(host, port + 1);
+                // Post without image
+                Socket so1 = new Socket(host, op.getOption());
                 DataOutputStream dosToServer = new DataOutputStream(so1.getOutputStream());
                 File f = new File(p.getPath_img());
                 dosToServer.writeLong(f.length());
@@ -83,11 +75,30 @@ public class ForumClient {
         }
     }
     
+    public void createComment (Comment c){
+        try{
+            Socket so = new Socket(host, port);
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
+
+            // Sending option to server: 2 = create comment
+            oosToServer.writeObject(new Option(2));
+            
+            // Sending the comment to the server
+            oosToServer.writeObject(c);
+        }catch(Exception ex){
+            System.err.println("CREATE COMMENT CLIENT ERROR");
+            ex.printStackTrace();
+        }
+    }
+    
     public List getAllPost(){
         try{
+            Socket so = new Socket(host, port);
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
             // Option: 1 = get all posts
             oosToServer.writeObject(new Option(1));
             List l = null;
+            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
             l = (List) oisFromServer.readObject();
             return l;
         }catch (Exception ex){
@@ -96,4 +107,6 @@ public class ForumClient {
         }
         return null;
     }
+    
+    
 }

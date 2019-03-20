@@ -1,6 +1,7 @@
 package ServerAndClient;
 
 import DAO.ForumDAO;
+import DTO.Comment;
 import DTO.Option;
 import DTO.Post;
 import java.io.DataInputStream;
@@ -24,35 +25,35 @@ public class ServerForumThread implements Runnable {
     private Socket cl;
     private ObjectInputStream oisFromClient;
     private ObjectOutputStream ousToClient;
+    // Change this according to your needs
     private String serverRoute = "C:\\Users\\elpat\\Documents\\ServerForum";
     // The server will read the option and then execute the needed method
     private Option opt;
+    private int port; // port for image uploading
 
-    public ServerForumThread(Socket cl) {
+    public ServerForumThread(Socket cl, int port) {
         this.cl = cl;
-        try {
-            oisFromClient = new ObjectInputStream(cl.getInputStream());
-            ousToClient = new ObjectOutputStream(cl.getOutputStream());
-        } catch (Exception ex) {
-            System.err.println("SERVER CONSTRUCTOR ERROR");
-            ex.printStackTrace();
-        }
+        this.port = port;
     }
 
     private void getClientOption() {
         try {
-            for (;;) {
-                System.out.println("Getting client option");
-                opt = (Option) oisFromClient.readObject();
-                // Here the server calls the required method
-                // 0 = create post without image
-                // 1 = get all posts
-                if (opt.getOption() == 0) {
-                    createPost();
-                } else if (opt.getOption() == 1) {
-                    getAllPost();
-                }
+            System.out.println("Getting client option");
+            oisFromClient = new ObjectInputStream(cl.getInputStream());
+            opt = (Option) oisFromClient.readObject();
+            // Here the server calls the required method
+            // 0 = create post without image
+            // 1 = get all posts
+            if (opt.getOption() == 0) {
+                createPost();
+                oisFromClient.close();
+            } else if (opt.getOption() == 1) {
+                getAllPost();
+            } else if (opt.getOption() == 2){
+                createComment();
             }
+            oisFromClient.close();
+            cl.close();
         } catch (Exception ex) {
             System.err.println("GET CLIENT OPTION ERROR");
             ex.printStackTrace();
@@ -64,6 +65,9 @@ public class ServerForumThread implements Runnable {
         ForumDAO fdao = new ForumDAO();
         Post p = new Post();
         try {
+            ObjectOutputStream oosToClient = new ObjectOutputStream(cl.getOutputStream());
+            oosToClient.writeObject(new Option(port));
+            
             p = (Post) oisFromClient.readObject();
             if (p.getPath_img() == null) { // No image
                 fdao.createPost(p);
@@ -71,8 +75,10 @@ public class ServerForumThread implements Runnable {
                 if (!Files.isDirectory(Paths.get(serverRoute + "\\" + p.getDate().toString()))) { // Check if directory exists
                     new File(serverRoute + "\\" + p.getDate().toString()).mkdir();
                 }
-                ServerSocket imageSocket = new ServerSocket(1235);
+                ServerSocket imageSocket = new ServerSocket(port);
+                imageSocket.setReuseAddress(true);
                 Socket cl2 = imageSocket.accept();
+                
                 DataInputStream disFromCl = new DataInputStream(cl2.getInputStream());
 
                 long fileSize = disFromCl.readLong();
@@ -104,20 +110,36 @@ public class ServerForumThread implements Runnable {
             ex.printStackTrace();
         }
     }
-
+    
+    public void createComment (){
+        System.out.println("CREATING COMMENT");
+        ForumDAO fdao = new ForumDAO();
+        Comment c = new Comment();
+        try{
+            c = (Comment) oisFromClient.readObject();
+            fdao.createComment(c);
+        }catch (Exception ex){
+            System.err.println("CREATE COMMENT ERROR");
+            ex.printStackTrace();
+        }
+    }
+    
     public void getAllPost() {
         System.out.println("Getting all posts server thread");
         ForumDAO fdao = new ForumDAO();
         List l = null;
         try {
             l = fdao.getAllPost();
-            if (l != null){
-                for (Object o : l){
+            if (l != null) {
+                System.out.println("Posts found in server");
+                for (Object o : l) {
                     Post p = (Post) o;
+                    System.out.println(p.getIdpost());
                     List coms = getComments(p);
                     p.setComments(coms);
                 }
             }
+            ousToClient = new ObjectOutputStream(cl.getOutputStream());
             ousToClient.writeObject(l);
         } catch (Exception ex) {
             System.err.println("GET ALL POST SERVER ERROR");
@@ -142,6 +164,7 @@ public class ServerForumThread implements Runnable {
     public void run() {
         System.out.println("IN THREAD: CL ADDR: " + cl.getInetAddress() + " CL PORT: " + cl.getPort());
         getClientOption();
+        System.err.println("EXITING THREAD");
     }
 
 }

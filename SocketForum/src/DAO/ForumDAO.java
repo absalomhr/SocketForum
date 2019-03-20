@@ -16,21 +16,38 @@ import java.util.List;
  */
 public class ForumDAO {
     private Connection con;
-    private static final String SQL_NEW_POST = "insert into post (message, path_img, user, date, topic, title) values (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT_POST = "insert into post (message, path_img, user, date, topic, title) values (?, ?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_ALL_POST = "select * from post";
     private static final String SQL_SELECT_COMMENTS = "select * from comment where id_post = ?";
+    private static final String SQL_INSERT_COMMENT = "insert into Comment (message, id_post, user, date) values (?, ?, ?, ?)";
     
     public void createPost (Post p) throws SQLException{
         getConnection();
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement(SQL_NEW_POST);
+            ps = con.prepareStatement(SQL_INSERT_POST);
             ps.setString(1, p.getMessage());
             ps.setString(2, p.getPath_img());
             ps.setString(3, p.getUser());
             ps.setDate(4, p.getDate());
             ps.setString(5, p.getTopic());
             ps.setString(6, p.getTitle());
+            ps.executeUpdate();
+        } finally {
+            ps.close();
+            con.close();
+        }
+    }
+    
+    public void createComment(Comment c) throws SQLException {
+        getConnection();
+        PreparedStatement ps = null;
+        try {
+            ps = con.prepareStatement(SQL_INSERT_COMMENT);
+            ps.setString(1, c.getMessage());
+            ps.setInt(2, c.getId_post());
+            ps.setString(3, c.getUser());
+            ps.setDate(4, c.getDate());
             ps.executeUpdate();
         } finally {
             ps.close();
@@ -102,7 +119,7 @@ public class ForumDAO {
             Comment c = new Comment();
             c.setDate(rs.getDate("date"));
             c.setIdComment(rs.getInt("idComment"));
-            c.setId_post(rs.getInt("id_psot"));
+            c.setId_post(rs.getInt("id_post"));
             c.setMessage(rs.getString("message"));
             c.setUser(rs.getString("user"));
             results.add(c);

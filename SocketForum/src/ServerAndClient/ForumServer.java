@@ -9,13 +9,12 @@ import java.net.Socket;
  */
 public class ForumServer {
 
-    private Socket cl;
     private ServerSocket s;
     private int port;
 
     public ForumServer() {
         // Creating server
-        port = 1234;
+    port = 1025;
 
         try {
             s = new ServerSocket(port);
@@ -31,10 +30,10 @@ public class ForumServer {
             for (;;) {
                 System.out.println("\nSERVER ON, WAITING FOR CLIENT CONNECTION");
                 // Accepting connetion from client and creating thread
-                cl = s.accept();
-                (new ServerForumThread(cl)).run();
-
-                // TODO: Keeping track of client connections
+                Socket cl = s.accept();
+                Thread t = new Thread(new ServerForumThread(cl, ++port));
+                t.start();
+                
             }
         } catch (Exception ex) {
             System.err.println("SERVER CONNECT ERROR");

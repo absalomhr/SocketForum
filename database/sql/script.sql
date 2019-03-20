@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 -- Table `Post_db`.`Comment`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Post_db`.`Comment` (
-  `idComment` INT NOT NULL,
+  `idComment` INT NOT NULL AUTO_INCREMENT,
   `message` VARCHAR(270) NULL,
   `id_post` INT NOT NULL,
   `user` VARCHAR(45) NULL,
@@ -63,3 +63,7 @@ insert into post (message, path_img, user, topic, title) values ("msg2", "path2"
 insert into post (message, path_img, user, topic, title) values ("msg3", "path3", "user3", "topic3", "title3");
 insert into post (message, path_img, user, topic, title) values ("msg4", "path4", "user4", "topic4", "title4");
 insert into post (message, path_img, user, topic, title) values ("msg5", "path5", "user5", "topic5", "title5");
+
+insert into Comment (message, id_post, user) values ("com1", 1, "user1");
+insert into Comment (message, id_post, user) values ("com2", 1, "user2");
+insert into Comment (message, id_post, user) values ("com3", 1, "user3");
