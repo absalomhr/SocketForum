@@ -7,8 +7,16 @@ package GUIs;
 
 import DTO.Post;
 import ServerAndClient.ForumClient;
+import java.io.File;
+import java.sql.Date;
+import java.time.Year;
+import java.util.Calendar;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -18,6 +26,7 @@ public class CreatePostGUI extends javax.swing.JFrame {
 
     private String user;
     private ClientMainGUI cmg;
+    private File img = null;
     /**
      * Creates new form CreatePostGUI
      */
@@ -52,6 +61,7 @@ public class CreatePostGUI extends javax.swing.JFrame {
         titleTextField = new javax.swing.JTextField();
         topicTextField = new javax.swing.JTextField();
         postButton = new javax.swing.JToggleButton();
+        attachButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +79,13 @@ public class CreatePostGUI extends javax.swing.JFrame {
         postButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 postButtonActionPerformed(evt);
+            }
+        });
+
+        attachButton.setText("Attach Image");
+        attachButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attachButtonActionPerformed(evt);
             }
         });
 
@@ -97,6 +114,10 @@ public class CreatePostGUI extends javax.swing.JFrame {
                         .addGap(171, 171, 171)
                         .addComponent(postButton)))
                 .addContainerGap(31, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(attachButton)
+                .addGap(146, 146, 146))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,11 +130,13 @@ public class CreatePostGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(msgLabel)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(topicLabel)
                     .addComponent(topicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(attachButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(postButton)
                 .addGap(25, 25, 25))
         );
@@ -127,14 +150,48 @@ public class CreatePostGUI extends javax.swing.JFrame {
         p.setMessage(msgTextArea.getText());
         p.setTopic(topicTextField.getText());
         p.setUser(user);
+        
+        if (img != null){
+            p.setPath_img(img.getPath());
+        }
+
+        
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DATE);
+        //int year = Year.now().getValue();
+        
+        
+        Date d = new Date(day, month, year);
+        
+        System.err.println(d.toString());
+        
         ForumClient fc = new ForumClient();
         fc.createPost(p);
         cmg.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_postButtonActionPerformed
 
+    private void attachButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attachButtonActionPerformed
+        JFileChooser jfc;
+        FileFilter imageFilter = new FileNameExtensionFilter(
+                "Image files", ImageIO.getReaderFileSuffixes());
+        jfc = new JFileChooser();
+        jfc.addChoosableFileFilter(imageFilter);
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if (jfc.isMultiSelectionEnabled()) {
+            jfc.setMultiSelectionEnabled(false);
+        }
+        int r = jfc.showOpenDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+            img = jfc.getSelectedFile();
+        }
+    }//GEN-LAST:event_attachButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton attachButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel msgLabel;
     private javax.swing.JTextArea msgTextArea;
