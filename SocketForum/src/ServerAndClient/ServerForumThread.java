@@ -29,7 +29,8 @@ public class ServerForumThread implements Runnable {
     private ObjectInputStream oisFromClient;
     private ObjectOutputStream ousToClient;
     // Change this according to your needs
-    private String serverRoute = "C:\\Users\\mike_\\Documents\\GitHub\\SocketForum";
+    //private String serverRoute = "C:\\Users\\mike_\\Documents\\GitHub\\SocketForum";
+    private String serverRoute = "C:\\Users\\elpat\\Documents\\ServerForum";
     // The server will read the option and then execute the needed method
     private Option opt;
     private int port; // port for image uploading
@@ -45,8 +46,10 @@ public class ServerForumThread implements Runnable {
             oisFromClient = new ObjectInputStream(cl.getInputStream());
             opt = (Option) oisFromClient.readObject();
             // Here the server calls the required method
-            // 0 = create post without image
+            // 0 = create post
             // 1 = get all posts
+            // 2 = create comment
+            // 3 = get post image
             if (opt.getOption() == 0) {
                 createPost();
                 oisFromClient.close();
@@ -55,6 +58,7 @@ public class ServerForumThread implements Runnable {
             } else if (opt.getOption() == 2){
                 createComment();
             } else if  (opt.getOption() == 3){
+                getPostImage();
             }
             oisFromClient.close();
             cl.close();
@@ -171,6 +175,18 @@ public class ServerForumThread implements Runnable {
             ex.printStackTrace();
         }
         return l;
+    }
+    
+    public void getPostImage (){
+        try {
+            Post p = (Post) oisFromClient.readObject();
+            
+            
+            
+        } catch (Exception ex) {
+            System.err.println("SERVER GET POST IMAGE ERROR");
+            ex.printStackTrace();
+        }        
     }
 
     @Override

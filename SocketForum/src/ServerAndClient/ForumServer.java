@@ -30,6 +30,7 @@ public class ForumServer {
                 System.out.println("\nSERVER ON, WAITING FOR CLIENT CONNECTION");
                 // Accepting connetion from client and creating thread
                 Socket cl = s.accept();
+
                 Thread t = new Thread(new ServerForumThread(cl, ++port));
                 t.start();
 

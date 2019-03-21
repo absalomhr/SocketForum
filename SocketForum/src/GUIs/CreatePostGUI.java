@@ -62,6 +62,7 @@ public class CreatePostGUI extends javax.swing.JFrame {
         topicTextField = new javax.swing.JTextField();
         postButton = new javax.swing.JToggleButton();
         attachButton = new javax.swing.JButton();
+        imageNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,17 +100,19 @@ public class CreatePostGUI extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(topicLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(topicTextField))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(msgLabel)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(titleLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(titleTextField))))
+                                .addComponent(titleTextField))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(topicLabel)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(imageNameLabel)
+                                    .addComponent(topicTextField)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(postButton)))
@@ -134,11 +137,13 @@ public class CreatePostGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(topicLabel)
                     .addComponent(topicTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(attachButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(5, 5, 5)
+                .addComponent(imageNameLabel)
+                .addGap(10, 10, 10)
                 .addComponent(postButton)
-                .addGap(25, 25, 25))
+                .addContainerGap())
         );
 
         pack();
@@ -177,12 +182,14 @@ public class CreatePostGUI extends javax.swing.JFrame {
         int r = jfc.showOpenDialog(null);
         if (r == JFileChooser.APPROVE_OPTION) {
             img = jfc.getSelectedFile();
+            imageNameLabel.setText(img.getName());
         }
     }//GEN-LAST:event_attachButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton attachButton;
+    private javax.swing.JLabel imageNameLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel msgLabel;
     private javax.swing.JTextArea msgTextArea;
