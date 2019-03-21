@@ -1,6 +1,6 @@
 package ServerAndClient;
 
-import GUIs.ClientMainGUI2;
+import GUIs.ClientMainGUI;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -12,10 +12,10 @@ import java.net.MulticastSocket;
  */
 public class UpdateListener implements Runnable {
 
-    private ClientMainGUI2 clientGUI;
+    private ClientMainGUI clientGUI;
     private int listenerPort;
 
-    public UpdateListener(ClientMainGUI2 clientGUI, int listenerPort) {
+    public UpdateListener(ClientMainGUI clientGUI, int listenerPort) {
         this.clientGUI = clientGUI;
         this.listenerPort = listenerPort;
     }

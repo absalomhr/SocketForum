@@ -8,14 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class ClientMainGUI2 extends JFrame implements ActionListener {
+public class ClientMainGUI extends JFrame implements ActionListener {
 
     private static JButton botonDe1, botonDe2;
     private String user;
     private ForumClient fc;
     private int listenerPort = 65535;
 
-    public ClientMainGUI2(String user) {
+    public ClientMainGUI(String user) {
         JFrame frame = new JFrame();
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -84,7 +84,7 @@ public class ClientMainGUI2 extends JFrame implements ActionListener {
             ssp2.setLayout(new FlowLayout());
             ssp2.setBackground(Color.WHITE);
             ssp2.setPreferredSize(new Dimension(350, 170));
-
+            /*
             JLabel l3 = new JLabel("Title: ");
             l3.setForeground(Color.BLACK);
             l3.setPreferredSize(new Dimension(100, 20));
@@ -120,7 +120,7 @@ public class ClientMainGUI2 extends JFrame implements ActionListener {
             l8.setPreferredSize(new Dimension(100, 20));
             JTextField t6 = new JTextField("Available");
             t6.setPreferredSize(new Dimension(320, 20));
-
+            
             JButton btnLoanHistory = new JButton("Loan History");
             btnLoanHistory.setPreferredSize(new Dimension(300, 20));
             JButton btnLoanItem = new JButton("Loan Item");
@@ -144,7 +144,7 @@ public class ClientMainGUI2 extends JFrame implements ActionListener {
             ssp2.add(btnLoanHistory);
             ssp2.add(btnLoanItem);
             ssp2.add(btnProcessReturn);
-
+*/
             sp1.add(ssp1); //Cuadros y labels
             sp1.add(ssp2); //Botones
             panel.add(sp1);

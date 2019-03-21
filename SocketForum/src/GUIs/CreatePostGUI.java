@@ -9,7 +9,6 @@ import DTO.Post;
 import ServerAndClient.ForumClient;
 import java.io.File;
 import java.sql.Date;
-import java.time.Year;
 import java.util.Calendar;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -26,12 +25,12 @@ public class CreatePostGUI extends javax.swing.JFrame {
 
     private String user;
     private File img = null;
-    private ClientMainGUI2 cmg;
+    private ClientMainGUI cmg;
 
     /**
      * Creates new form CreatePostGUI
      */
-    public CreatePostGUI(String user, ClientMainGUI2 cmg) {
+    public CreatePostGUI(String user, ClientMainGUI cmg) {
         this.user = user;
         this.cmg = cmg;
         // TODO: Style, Non empty fields, image attachment and no image recognition, cancel button, date
@@ -155,18 +154,9 @@ public class CreatePostGUI extends javax.swing.JFrame {
         if (img != null){
             p.setPath_img(img.getPath());
         }
-
-        
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DATE);
-        //int year = Year.now().getValue();
-        
-        
-        Date d = new Date(day, month, year);
-        
-        System.err.println(d.toString());
+                
+        Date date = new Date(Calendar.getInstance().getTime().getTime());
+        p.setDate(date);
         
         ForumClient fc = new ForumClient();
         fc.createPost(p);
