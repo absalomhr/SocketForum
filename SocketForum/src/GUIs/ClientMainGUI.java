@@ -1,6 +1,5 @@
 package GUIs;
 
-import DTO.Option;
 import DTO.Post;
 import ServerAndClient.ForumClient;
 import ServerAndClient.UpdateListener;

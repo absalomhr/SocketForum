@@ -106,6 +106,7 @@ public class ServerForumThread implements Runnable {
                     percent = (int) ((r * 100) / fileSize);
                     System.out.print("\rRECEIVING: " + percent + "%");
                 }
+                System.out.print("\n");
                 dosToFile.close();
                 disFromCl.close();
                 cl2.close();
@@ -211,6 +212,7 @@ public class ServerForumThread implements Runnable {
                 percent = (int) ((sent * 100) / fileSize);
                 System.out.print("\rSENT: " + percent + " %");
             }
+            System.out.print("\n");
             disFromFile.close();
             dosToClient.close();
             imageSocket.close();

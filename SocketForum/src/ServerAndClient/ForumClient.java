@@ -67,6 +67,7 @@ public class ForumClient {
                     percent = (int) ((sent * 100) / f.length());
                     System.out.print("\rSENT: " + percent + " %");
                 }
+                System.out.print("\n");
                 disFromFile.close();
                 dosToServer.close();
                 so1.close();
@@ -145,6 +146,7 @@ public class ForumClient {
                 percent = (int) ((r * 100) / fileSize);
                 System.out.print("\rRECEIVING: " + percent + "%");
             }
+            System.out.print("\n");
             dosToFile.close();
             disFromServer.close();
             imageSo.close();
