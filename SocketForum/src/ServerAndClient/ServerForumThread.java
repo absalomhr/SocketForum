@@ -29,7 +29,7 @@ public class ServerForumThread implements Runnable {
     private ObjectInputStream oisFromClient;
     private ObjectOutputStream ousToClient;
     // Change this according to your needs
-    private String serverRoute = "C:\\Users\\elpat\\Documents\\ServerForum";
+    private String serverRoute = "C:\\Users\\mike_\\Documents\\GitHub\\SocketForum";
     // The server will read the option and then execute the needed method
     private Option opt;
     private int port; // port for image uploading
