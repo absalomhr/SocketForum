@@ -1,11 +1,13 @@
 package GUIs;
 
+import DTO.Option;
 import DTO.Post;
 import ServerAndClient.ForumClient;
 import ServerAndClient.UpdateListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.*;
 import java.util.List;
 
@@ -15,9 +17,11 @@ public class ClientMainGUI extends JFrame implements ActionListener {
     private String user;
     private ForumClient fc;
     private int listenerPort = 65535;
+    private ArrayList<Integer> postWithImage;
 
     public ClientMainGUI(String user) {
         JFrame frame = new JFrame();
+        postWithImage = new ArrayList<>();
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.updateComponentTreeUI(frame);
@@ -72,23 +76,24 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         List posts = getAllPost();
         // unique client instance
         fc = new ForumClient();
-        for (int i = 0; i < posts.size(); i++) {
-            Post p1 = (Post) posts.get(i);
-            JPanel sp1 = new JPanel(); //Post
-            sp1.setLayout(new BoxLayout(sp1, BoxLayout.X_AXIS));
-            sp1.setBackground(Color.blue);
-            sp1.setPreferredSize(new Dimension(550, 200));
+        if (posts != null){
+            for (int i = 0; i < posts.size(); i++) {
+                Post p1 = (Post) posts.get(i);
+                JPanel sp1 = new JPanel(); //Post
+                sp1.setLayout(new BoxLayout(sp1, BoxLayout.X_AXIS));
+                sp1.setBackground(Color.blue);
+                sp1.setPreferredSize(new Dimension(550, 200));
 
-            JPanel ssp1 = new JPanel(); //Cuadros y labels
-            //ssp1.setLayout(new FlowLayout());
-            ssp1.setBackground(new Color(51, 153, 255));
-            ssp1.setPreferredSize(new Dimension(100, 200));
+                JPanel ssp1 = new JPanel(); //Cuadros y labels
+                //ssp1.setLayout(new FlowLayout());
+                ssp1.setBackground(new Color(51, 153, 255));
+                ssp1.setPreferredSize(new Dimension(100, 200));
 
-            JPanel ssp2 = new JPanel(); //Botones
-            ssp2.setLayout(new FlowLayout());
-            ssp2.setBackground(Color.WHITE);
-            ssp2.setPreferredSize(new Dimension(350, 170));
-            /*
+                JPanel ssp2 = new JPanel(); //Botones
+                ssp2.setLayout(new FlowLayout());
+                ssp2.setBackground(Color.WHITE);
+                ssp2.setPreferredSize(new Dimension(350, 170));
+                /*
             JLabel l3 = new JLabel("Title: ");
             l3.setForeground(Color.BLACK);
             l3.setPreferredSize(new Dimension(100, 20));
@@ -148,49 +153,50 @@ public class ClientMainGUI extends JFrame implements ActionListener {
             ssp2.add(btnLoanHistory);
             ssp2.add(btnLoanItem);
             ssp2.add(btnProcessReturn);
-*/            //ssp2.setLayout(new FlowLayout());
-            ssp2.setBackground(new Color(51, 153, 255));
-            ssp2.setPreferredSize(new Dimension(300, 200));
+                 */            //ssp2.setLayout(new FlowLayout());
+                ssp2.setBackground(new Color(51, 153, 255));
+                ssp2.setPreferredSize(new Dimension(300, 200));
 
-            JLabel pTitle = new JLabel(p1.getTitle());
-            pTitle.setForeground(Color.BLACK);
-            pTitle.setFont(new Font("Times New Roman", Font.BOLD, 12));
-            pTitle.setPreferredSize(new Dimension(100, 20));
+                JLabel pTitle = new JLabel(p1.getTitle());
+                pTitle.setForeground(Color.BLACK);
+                pTitle.setFont(new Font("Times New Roman", Font.BOLD, 12));
+                pTitle.setPreferredSize(new Dimension(100, 20));
 
-            JLabel pTopic = new JLabel(p1.getTopic());
-            pTopic.setForeground(Color.BLACK);
-            pTopic.setFont(new Font("Times New Roman", Font.BOLD, 12));
-            pTopic.setPreferredSize(new Dimension(100, 20));
+                JLabel pTopic = new JLabel(p1.getTopic());
+                pTopic.setForeground(Color.BLACK);
+                pTopic.setFont(new Font("Times New Roman", Font.BOLD, 12));
+                pTopic.setPreferredSize(new Dimension(100, 20));
 
-            JLabel pUser = new JLabel(p1.getUser());
-            pUser.setForeground(Color.BLACK);
-            pUser.setFont(new Font("Times New Roman", Font.BOLD, 12));
-            pUser.setPreferredSize(new Dimension(100, 20));
+                JLabel pUser = new JLabel(p1.getUser());
+                pUser.setForeground(Color.BLACK);
+                pUser.setFont(new Font("Times New Roman", Font.BOLD, 12));
+                pUser.setPreferredSize(new Dimension(100, 20));
 
-            JLabel pMessage = new JLabel(p1.getMessage());
-            pMessage.setForeground(Color.BLACK);
-            pMessage.setFont(new Font("Times New Roman", Font.BOLD, 12));
-            pMessage.setPreferredSize(new Dimension(100, 20));
+                JLabel pMessage = new JLabel(p1.getMessage());
+                pMessage.setForeground(Color.BLACK);
+                pMessage.setFont(new Font("Times New Roman", Font.BOLD, 12));
+                pMessage.setPreferredSize(new Dimension(100, 20));
 
-            /*JLabel pDate = new JLabel(p1.getDate());
+                /*JLabel pDate = new JLabel(p1.getDate());
             pDate.setForeground(Color.BLACK);
             pDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
             pDate.setPreferredSize(new Dimension(100, 20));*/
-            JButton btnComments = new JButton("Comments");
-            btnComments.setPreferredSize(new Dimension(100, 20));
+                JButton btnComments = new JButton("Comments");
+                btnComments.setPreferredSize(new Dimension(100, 20));
 
-            ssp1.add(pTitle);
-            ssp1.add(pTopic);
-            ssp1.add(pUser);
-            ssp1.add(pMessage);
-            //ssp1.add(pDate);
+                ssp1.add(pTitle);
+                ssp1.add(pTopic);
+                ssp1.add(pUser);
+                ssp1.add(pMessage);
+                //ssp1.add(pDate);
 
-            ssp2.add(btnComments);
+                ssp2.add(btnComments);
 
-            sp1.add(ssp1); //Cuadros y labels
-            sp1.add(ssp2); //Botones
-            panel.add(sp1);
+                sp1.add(ssp1); //Cuadros y labels
+                sp1.add(ssp2); //Botones
+                panel.add(sp1);
 
+            }
         }
         frame.add(panelDerecho, BorderLayout.EAST);
         frame.add(Title, BorderLayout.NORTH);
@@ -222,6 +228,14 @@ public class ClientMainGUI extends JFrame implements ActionListener {
             for (int i = 0; i < l.size(); i++) {
                 Post p = (Post) l.get(i);
                 System.out.println("\n" + p.toString());
+                if (postWithImage.contains(p.getIdpost())){
+                    continue;
+                }
+                else if (p.getPath_img() != null){
+                    fc.getPostImage(p);
+                    postWithImage.add(p.getIdpost());
+                }
+                
             }
         } else {
             System.err.println("NULL POSTS");

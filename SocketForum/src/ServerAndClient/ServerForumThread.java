@@ -7,6 +7,7 @@ import DTO.Post;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -180,8 +181,39 @@ public class ServerForumThread implements Runnable {
     public void getPostImage (){
         try {
             Post p = (Post) oisFromClient.readObject();
+            File imageToSend = new File(p.getPath_img());
+            String fileName = imageToSend.getName();
+            Long fileSize = imageToSend.length();
             
+            ObjectOutputStream oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            oosToCl.writeObject(new Option(port));
             
+            ServerSocket imageSocket = new ServerSocket(port);
+            imageSocket.setReuseAddress(true);
+            Socket cl2 = imageSocket.accept();
+            
+            DataOutputStream dosToClient = new DataOutputStream(cl2.getOutputStream());
+            dosToClient.writeUTF(fileName);
+            dosToClient.flush();
+            dosToClient.writeLong(fileSize);
+            dosToClient.flush();
+            
+            System.out.println("SENDING IMAGE FILE : " + fileName);
+            long sent = 0;
+            int percent = 0, n = 0;
+            DataInputStream disFromFile = new DataInputStream(new FileInputStream(imageToSend.getAbsolutePath()));
+            while (sent < fileSize) {
+                byte[] b = new byte[1500];
+                n = disFromFile.read(b);
+                dosToClient.write(b, 0, n);
+                dosToClient.flush();
+                sent += n;
+                percent = (int) ((sent * 100) / fileSize);
+                System.out.print("\rSENT: " + percent + " %");
+            }
+            disFromFile.close();
+            dosToClient.close();
+            imageSocket.close();
             
         } catch (Exception ex) {
             System.err.println("SERVER GET POST IMAGE ERROR");

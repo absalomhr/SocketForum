@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -20,6 +21,7 @@ public class ForumClient {
 
     private int port;
     private String host;
+    private String clientRoute = "C:\\Users\\elpat\\Documents\\ClientForum";
 
     public ForumClient() {
         host = "127.0.0.1";
@@ -108,5 +110,49 @@ public class ForumClient {
         return null;
     }
     
-    
+    public void getPostImage (Post p){
+        System.out.println("GETTING IMAGE FROM SERVER");
+        
+        
+        try{
+            Socket so = new Socket(host, port);
+            ObjectOutputStream oosToServer = new ObjectOutputStream(so.getOutputStream());
+
+            // Sending option to server: 0 = create post
+            oosToServer.writeObject(new Option(3));
+            oosToServer.writeObject(p);
+            
+            ObjectInputStream oisFromServer = new ObjectInputStream(so.getInputStream());
+            Option op = (Option) oisFromServer.readObject(); // Reading available port
+            
+            Socket imageSo = new Socket(host, op.getOption());
+            DataInputStream disFromServer = new DataInputStream(imageSo.getInputStream());
+            
+            String fileName = disFromServer.readUTF();
+            Long fileSize = disFromServer.readLong();
+            
+            String filePath = clientRoute + "\\" + fileName;
+            DataOutputStream dosToFile = new DataOutputStream(new FileOutputStream(filePath));
+
+            long r = 0;
+            int n = 0, percent = 0;
+            while (r < fileSize) {
+                byte[] b = new byte[1500];
+                n = disFromServer.read(b);
+                dosToFile.write(b, 0, n);
+                dosToFile.flush();
+                r += n;
+                percent = (int) ((r * 100) / fileSize);
+                System.out.print("\rRECEIVING: " + percent + "%");
+            }
+            dosToFile.close();
+            disFromServer.close();
+            imageSo.close();
+            p.setPath_img(filePath);
+            
+        }catch (Exception e){
+            System.err.println("GET POST IMAGE CL ERROR");
+            e.printStackTrace();
+        }
+    }
 }
