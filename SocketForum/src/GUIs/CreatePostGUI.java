@@ -25,12 +25,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class CreatePostGUI extends javax.swing.JFrame {
 
     private String user;
-    private ClientMainGUI cmg;
     private File img = null;
+    private ClientMainGUI2 cmg;
+
     /**
      * Creates new form CreatePostGUI
      */
-    public CreatePostGUI(String user, ClientMainGUI cmg) {
+    public CreatePostGUI(String user, ClientMainGUI2 cmg) {
         this.user = user;
         this.cmg = cmg;
         // TODO: Style, Non empty fields, image attachment and no image recognition, cancel button, date
