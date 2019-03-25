@@ -129,7 +129,8 @@ public class ForumDAO {
     
     private void getConnection() {
         String user = "root";
-        String pwd = "absalom94";
+        //String pwd = "absalom94";
+        String pwd = "root";
         //String pwd = "ale970807";
         String url = "jdbc:mysql://localhost:3306/Post_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
         String mySqlDriver = "com.mysql.jdbc.Driver";

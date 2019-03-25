@@ -12,7 +12,9 @@ import java.util.List;
 public class ServerClientTest {
     public static void main(String[] args) {
         
-        String imagePath = "C:\\Users\\elpat\\Documents\\Mim\\frog.jpg";
+        //String imagePath = "C:\\Users\\elpat\\Documents\\Mim\\frog.jpg";
+        String imagePath = "C:\\Users\\Carlo\\OneDrive\\Pictures\\Wallpapers\\1b5862deb67da716fb5f99581a1b1efa11b11344dac37479093154ad4e7d44a2.jpg";
+        
         Post p = new Post();
         
         p.setMessage("mensagge1");
