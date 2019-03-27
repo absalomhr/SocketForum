@@ -91,7 +91,7 @@ public class ForumDAO {
                 return null;
             }
         } finally {
-            rs.close();
+            //rs.close();
             ps.close();
             con.close();
         }
@@ -122,6 +122,7 @@ public class ForumDAO {
             c.setId_post(rs.getInt("id_post"));
             c.setMessage(rs.getString("message"));
             c.setUser(rs.getString("user"));
+            System.out.println(c.toString());
             results.add(c);
         }
         return results;
