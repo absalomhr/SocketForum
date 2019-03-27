@@ -35,7 +35,7 @@ public class UpdateListener implements Runnable {
                 
                 // We receive the option
                 DatagramPacket dgp = new DatagramPacket(data, data.length);
-                System.out.println("escuchando desde: " + listenerPort);
+                System.out.println("HEARD FROM: " + listenerPort);
                 listen.receive(dgp);
                 
                 data = dgp.getData();
