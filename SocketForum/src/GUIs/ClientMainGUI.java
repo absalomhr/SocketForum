@@ -12,11 +12,13 @@ import java.util.List;
 
 public class ClientMainGUI extends JFrame implements ActionListener {
 
-    private static JButton botonDe1, botonDe2;
+    private static JButton botonDe1, botonDe2, searchButton;
+    private static JTextField searchTextField;
     private String user;
     private ForumClient fc;
     private int listenerPort = 65535;
     private ArrayList<Integer> postWithImage;
+    private List allPosts = null;
 
     public ClientMainGUI(String user) {
         JFrame frame = new JFrame();
@@ -61,15 +63,22 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         contentPane.setBackground(Color.lightGray);
 
         JPanel panelDerecho = new JPanel();
+        searchButton = new JButton("Search");
+        searchButton.setSize(100, 30);
+        searchButton.addActionListener(this);
         botonDe1 = new JButton("Create New Post");
         botonDe1.setSize(100, 30);
         botonDe1.addActionListener(this);
         botonDe2 = new JButton("Log Out");
         botonDe2.setSize(100, 30);
         botonDe2.addActionListener(this);
+        //searchTextField = new JTextField();
+        //searchTextField.setSize(100, 30);
         panelDerecho.setLayout(new BoxLayout(panelDerecho, BoxLayout.Y_AXIS));
         panelDerecho.add(botonDe1);
         panelDerecho.add(botonDe2);
+        panelDerecho.add(searchButton);
+        //panelDerecho.add(searchTextField);
 
         // We call this method to obtain posts
         List posts = getAllPost();
@@ -200,6 +209,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         frame.add(panelDerecho, BorderLayout.EAST);
         frame.add(Title, BorderLayout.NORTH);
         frame.add(contentPane, BorderLayout.CENTER);
+        
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
@@ -216,6 +226,23 @@ public class ClientMainGUI extends JFrame implements ActionListener {
             l.setVisible(true);
             System.exit(0);
             this.dispose();
+        } else if (e.getSource() == searchButton){
+            String query = JOptionPane.showInputDialog("Search");
+            if (query.equals("") || query == null){
+                System.out.println("CANT SEARCH");
+            }
+            else {
+                List foundPosts = search(query);
+                if (foundPosts != null){
+                    for (int i = 0; i < foundPosts.size(); i++) {
+                        Post p = (Post) foundPosts.get(i);
+                        System.out.println(p.toString());
+                    }
+                    // Usar los posts encontrado para mostrarlos
+                } else {
+                    System.out.println("NO RESULTS FOUND");
+                }   
+            }
         }
     }
 
@@ -224,6 +251,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         List l = null;
         l = fc.getAllPost();
         if (l != null) {
+            allPosts = l;
             for (int i = 0; i < l.size(); i++) {
                 Post p = (Post) l.get(i);
                 System.out.println("\n" + p.toString());
@@ -242,4 +270,17 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         return l;
     }
 
+    public ArrayList search (String keyword){
+        ArrayList foundPosts = null;
+        if (allPosts != null){
+        foundPosts = new ArrayList();
+            for (int i = 0; i < allPosts.size(); i++) {
+                Post p = (Post) allPosts.get(i);
+                if (p.getDate().toString().equals(keyword) || p.getTopic().equals(keyword)) {
+                    foundPosts.add(p);
+                }
+            }
+        }
+        return foundPosts;
+    }
 }
