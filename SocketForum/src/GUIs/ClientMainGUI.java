@@ -1,5 +1,6 @@
 package GUIs;
 
+import DTO.Comment;
 import DTO.Post;
 import ServerAndClient.ForumClient;
 import ServerAndClient.UpdateListener;
@@ -12,17 +13,26 @@ import java.util.List;
 
 public class ClientMainGUI extends JFrame implements ActionListener {
 
+
     private static JButton botonDe1, botonDe2, searchButton;
     private static JTextField searchTextField;
+    JButton btnComments[];
+
     private String user;
     private ForumClient fc;
     private int listenerPort = 65535;
     private ArrayList<Integer> postWithImage;
+
     private List allPosts = null;
+
+    private int total_btns;
+    private List comments[];
+
 
     public ClientMainGUI(String user) {
         JFrame frame = new JFrame();
         postWithImage = new ArrayList<>();
+        total_btns = 0;
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.updateComponentTreeUI(frame);
@@ -84,7 +94,12 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         List posts = getAllPost();
         // unique client instance
         fc = new ForumClient();
+        
         if (posts != null){
+
+            total_btns = posts.size();
+            comments = new List[total_btns];
+            btnComments = new JButton[posts.size()];
             for (int i = 0; i < posts.size(); i++) {
                 Post p1 = (Post) posts.get(i);
                 JPanel sp1 = new JPanel(); //Post
@@ -189,16 +204,17 @@ public class ClientMainGUI extends JFrame implements ActionListener {
             pDate.setForeground(Color.BLACK);
             pDate.setFont(new Font("Times New Roman", Font.BOLD, 12));
             pDate.setPreferredSize(new Dimension(100, 20));*/
-                JButton btnComments = new JButton("Comments");
-                btnComments.setPreferredSize(new Dimension(100, 20));
-
+                btnComments[i] = new JButton("Comments ");
+                comments[i] = ((Post)posts.get(i)).getComments();
+                btnComments[i].setPreferredSize(new Dimension(100, 20));
+                btnComments[i].addActionListener(this);
                 ssp1.add(pTitle);
                 ssp1.add(pTopic);
                 ssp1.add(pUser);
                 ssp1.add(pMessage);
                 //ssp1.add(pDate);
 
-                ssp2.add(btnComments);
+                ssp2.add(btnComments[i]);
 
                 sp1.add(ssp1); //Cuadros y labels
                 sp1.add(ssp2); //Botones
@@ -244,6 +260,20 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 }   
             }
         }
+        for(int i = 0; i < total_btns; i++) {
+            if(e.getSource() == btnComments[i]) {
+                String comment_s = "";
+                List current = comments[i];
+                for(Object c: current) {
+                    String msg = ((Comment)c).getMessage();
+                    String usr = ((Comment)c).getUser();
+                    comment_s += (msg + " " + usr + "\n");
+                }
+                JOptionPane.showMessageDialog(null, comment_s );
+                //JOptionPane.showMessageDialog(null, "test");
+            }
+        }
+        
     }
 
     public List getAllPost() {
