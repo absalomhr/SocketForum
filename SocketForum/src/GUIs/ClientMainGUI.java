@@ -1,5 +1,6 @@
 package GUIs;
 
+import DAO.ForumDAO;
 import DTO.Comment;
 import DTO.Post;
 import ServerAndClient.ForumClient;
@@ -7,9 +8,12 @@ import ServerAndClient.UpdateListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientMainGUI extends JFrame implements ActionListener {
 
@@ -21,7 +25,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
     private ArrayList<Integer> postWithImage;
     private int total_btns;
     private List comments[];
-
+    List posts;
     public ClientMainGUI(String user) {
         JFrame frame = new JFrame();
         postWithImage = new ArrayList<>();
@@ -41,6 +45,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
 
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setTitle("Socket Forum");
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
@@ -77,7 +82,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         panelDerecho.add(botonDe2);
 
         // We call this method to obtain posts
-        List posts = getAllPost();
+        posts = getAllPost();
         // unique client instance
         fc = new ForumClient();
         
@@ -102,67 +107,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 ssp2.setLayout(new FlowLayout());
                 ssp2.setBackground(Color.WHITE);
                 ssp2.setPreferredSize(new Dimension(350, 170));
-                /*
-            JLabel l3 = new JLabel("Title: ");
-            l3.setForeground(Color.BLACK);
-            l3.setPreferredSize(new Dimension(100, 20));
-            JTextField t1 = new JTextField("Electronic Basics");
-            t1.setPreferredSize(new Dimension(320, 20));
-
-            JLabel l4 = new JLabel("Type: ");
-            l4.setForeground(Color.BLACK);
-            l4.setPreferredSize(new Dimension(100, 20));
-            JTextField t2 = new JTextField("Book");
-            t2.setPreferredSize(new Dimension(320, 20));
-
-            JLabel l5 = new JLabel("Authors: ");
-            l5.setForeground(Color.BLACK);
-            l5.setPreferredSize(new Dimension(100, 20));
-            JTextField t3 = new JTextField("Bob the Builder");
-            t3.setPreferredSize(new Dimension(320, 20));
-
-            JLabel l6 = new JLabel("Publisher: ");
-            l6.setForeground(Color.BLACK);
-            l6.setPreferredSize(new Dimension(100, 20));
-            JTextField t4 = new JTextField("ABC Company");
-            t4.setPreferredSize(new Dimension(320, 20));
-
-            JLabel l7 = new JLabel("Location: ");
-            l7.setForeground(Color.BLACK);
-            l7.setPreferredSize(new Dimension(100, 20));
-            JTextField t5 = new JTextField("Shelf 1 Row 3");
-            t5.setPreferredSize(new Dimension(320, 20));
-
-            JLabel l8 = new JLabel("Status: ");
-            l8.setForeground(Color.BLACK);
-            l8.setPreferredSize(new Dimension(100, 20));
-            JTextField t6 = new JTextField("Available");
-            t6.setPreferredSize(new Dimension(320, 20));
-            
-            JButton btnLoanHistory = new JButton("Loan History");
-            btnLoanHistory.setPreferredSize(new Dimension(300, 20));
-            JButton btnLoanItem = new JButton("Loan Item");
-            btnLoanItem.setPreferredSize(new Dimension(300, 20));
-            JButton btnProcessReturn = new JButton("Process Return");
-            btnProcessReturn.setPreferredSize(new Dimension(300, 20));
-
-            ssp1.add(l3);
-            ssp1.add(t1);
-            ssp1.add(l4);
-            ssp1.add(t2);
-            ssp1.add(l5);
-            ssp1.add(t3);
-            ssp1.add(l6);
-            ssp1.add(t4);
-            ssp1.add(l7);
-            ssp1.add(t5);
-            ssp1.add(l8);
-            ssp1.add(t6);
-
-            ssp2.add(btnLoanHistory);
-            ssp2.add(btnLoanItem);
-            ssp2.add(btnProcessReturn);
-                 */            //ssp2.setLayout(new FlowLayout());
+             
                 ssp2.setBackground(new Color(51, 153, 255));
                 ssp2.setPreferredSize(new Dimension(300, 200));
 
@@ -230,15 +175,17 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         }
         for(int i = 0; i < total_btns; i++) {
             if(e.getSource() == btnComments[i]) {
-                String comment_s = "";
-                List current = comments[i];
-                for(Object c: current) {
-                    String msg = ((Comment)c).getMessage();
-                    String usr = ((Comment)c).getUser();
-                    comment_s += (msg + " " + usr + "\n");
+                ForumDAO fd = new ForumDAO();
+                try {
+                    comments[i] = fd.getComments((Post)(posts.get(i)));
+                } catch (SQLException ex) {
+                    Logger.getLogger(ClientMainGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                JOptionPane.showMessageDialog(null, comment_s );
-                //JOptionPane.showMessageDialog(null, "test");
+                
+                Post post = (Post)posts.get(i);
+                System.out.println(post.toString());
+                
+                new CommentGUI(comments[i], post.getIdpost(), post.getUser()).setVisible(true);
             }
         }
         
