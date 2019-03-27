@@ -50,6 +50,12 @@ public class Login extends javax.swing.JFrame {
         userLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         userLabel.setText("Choose a username:");
 
+        userTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userTextFieldActionPerformed(evt);
+            }
+        });
+
         loginButton.setText("Let me post!");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,6 +118,10 @@ public class Login extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void userTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTextFieldActionPerformed
+        loginButtonActionPerformed(evt);
+    }//GEN-LAST:event_userTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
