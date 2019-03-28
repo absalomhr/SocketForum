@@ -55,7 +55,7 @@ public class ForumClient {
                 File f = new File(p.getPath_img());
                 dosToServer.writeLong(f.length());
                 dosToServer.writeUTF(f.getName());
-                System.out.println("SENDING IMAGE FILE : " + f.getName());
+                //System.out.println("SENDING IMAGE FILE : " + f.getName());
                 long sent = 0;
                 int percent = 0, n = 0;
                 DataInputStream disFromFile = new DataInputStream(new FileInputStream(f.getAbsolutePath()));
@@ -66,15 +66,15 @@ public class ForumClient {
                     dosToServer.flush();
                     sent += n;
                     percent = (int) ((sent * 100) / f.length());
-                    System.out.print("\rSENT: " + percent + " %");
+                    //System.out.print("\rSENT: " + percent + " %");
                 }
-                System.out.print("\n");
+                //System.out.print("\n");
                 disFromFile.close();
                 dosToServer.close();
                 so1.close();
             }
         } catch (Exception ex) {
-            System.err.println("CREATE POST CL ERROR");
+            //System.err.println("CREATE POST CL ERROR");
             ex.printStackTrace();
         }
     }
@@ -90,7 +90,7 @@ public class ForumClient {
             // Sending the comment to the server
             oosToServer.writeObject(c);
         }catch(Exception ex){
-            System.err.println("CREATE COMMENT CLIENT ERROR");
+            //System.err.println("CREATE COMMENT CLIENT ERROR");
             ex.printStackTrace();
         }
     }
@@ -106,14 +106,14 @@ public class ForumClient {
             l = (List) oisFromServer.readObject();
             return l;
         }catch (Exception ex){
-            System.err.println("GET ALL POST CL ERROR");
+            //System.err.println("GET ALL POST CL ERROR");
             ex.printStackTrace();
         }
         return null;
     }
     
     public void getPostImage (Post p){
-        System.out.println("GETTING IMAGE FROM SERVER");
+        //System.out.println("GETTING IMAGE FROM SERVER");
         
         
         try{
@@ -145,16 +145,16 @@ public class ForumClient {
                 dosToFile.flush();
                 r += n;
                 percent = (int) ((r * 100) / fileSize);
-                System.out.print("\rRECEIVING: " + percent + "%");
+                //System.out.print("\rRECEIVING: " + percent + "%");
             }
-            System.out.print("\n");
+            //System.out.print("\n");
             dosToFile.close();
             disFromServer.close();
             imageSo.close();
             p.setPath_img(filePath);
             
         }catch (Exception e){
-            System.err.println("GET POST IMAGE CL ERROR");
+            //System.err.println("GET POST IMAGE CL ERROR");
             e.printStackTrace();
         }
     }
