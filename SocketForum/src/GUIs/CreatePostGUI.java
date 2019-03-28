@@ -160,7 +160,9 @@ public class CreatePostGUI extends javax.swing.JFrame {
         
         ForumClient fc = new ForumClient();
         fc.createPost(p);
-        cmg.setVisible(true);
+        
+        cmg.createComponent(p);
+        cmg = new ClientMainGUI(user);
         this.dispose();
     }//GEN-LAST:event_postButtonActionPerformed
 
