@@ -8,19 +8,25 @@ import ServerAndClient.UpdateListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 public class ClientMainGUI extends JFrame implements ActionListener {
 
 
     private static JButton botonDe1, botonDe2, searchButton;
     private static JTextField searchTextField;
-    JButton btnComments[];
+    private JButton btnComments[];
+    BufferedImage myPicture;
+    JLabel picLabel;
 
     private String user;
     private ForumClient fc;
@@ -28,10 +34,9 @@ public class ClientMainGUI extends JFrame implements ActionListener {
     private ArrayList<Integer> postWithImage;
 
     private List allPosts = null;
-
     private int total_btns;
     private List comments[];
-    List posts;
+    private List posts;
     private String current_user;
 
     public ClientMainGUI(String user) {
@@ -90,6 +95,8 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         botonDe2 = new JButton("Log Out");
         botonDe2.setSize(100, 30);
         botonDe2.addActionListener(this);
+        
+        
         //searchTextField = new JTextField();
         //searchTextField.setSize(100, 30);
         panelDerecho.setLayout(new BoxLayout(panelDerecho, BoxLayout.Y_AXIS));
@@ -119,6 +126,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 //ssp1.setLayout(new FlowLayout());
                 ssp1.setBackground(new Color(51, 153, 255));
                 ssp1.setPreferredSize(new Dimension(100, 200));
+                
 
                 JPanel ssp2 = new JPanel(); //Botones
                 ssp2.setLayout(new FlowLayout());
@@ -161,7 +169,13 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 ssp1.add(pUser);
                 ssp1.add(pMessage);
                 //ssp1.add(pDate);
-
+                try {
+                    myPicture = ImageIO.read(new File(p1.getPath_img()));
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientMainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                picLabel = new JLabel(new ImageIcon(new ImageIcon(myPicture).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+                ssp2.add(picLabel);
                 ssp2.add(btnComments[i]);
 
                 sp1.add(ssp1); //Cuadros y labels
