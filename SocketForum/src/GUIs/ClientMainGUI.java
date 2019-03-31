@@ -196,13 +196,15 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 System.out.println("CANT SEARCH");
             }
             else {
-                List foundPosts = search(query);
+                ArrayList foundPosts = search(query);
                 if (foundPosts != null){
                     for (int i = 0; i < foundPosts.size(); i++) {
                         Post p = (Post) foundPosts.get(i);
-                        //System.out.println(p.toString());
+                        System.out.println(p.toString());
                     }
                     // Usar los posts encontrado para mostrarlos
+                    SearchGUI sg = new SearchGUI(foundPosts);
+                    sg.setVisible(true);
                 } else {
                     System.out.println("NO RESULTS FOUND");
                 }   

@@ -13,7 +13,8 @@ public class ServerClientTest {
     public static void main(String[] args) {
         
         //String imagePath = "C:\\Users\\elpat\\Documents\\Mim\\frog.jpg";
-        String imagePath = "C:\\Users\\Carlo\\OneDrive\\Pictures\\Wallpapers\\1b5862deb67da716fb5f99581a1b1efa11b11344dac37479093154ad4e7d44a2.jpg";
+       // String imagePath = "C:\\Users\\Carlo\\OneDrive\\Pictures\\Wallpapers\\1b5862deb67da716fb5f99581a1b1efa11b11344dac37479093154ad4e7d44a2.jpg";
+       String imagePath = "C:\\Users\\mike_\\Pictures\\pato.jpg";
         
         Post p = new Post();
         
@@ -42,7 +43,7 @@ public class ServerClientTest {
        // n.sendpost(p);
 
         
-        p.setPath_img("C:\\Users\\elpat\\Documents\\Mim\\vecindad.jpg");
+        p.setPath_img("C:\\Users\\mike_\\Pictures\\pato.jpg");
         p.setMessage("mensagge2");
        //n.sendpost(p);
         
