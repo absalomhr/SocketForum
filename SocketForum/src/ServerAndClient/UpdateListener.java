@@ -40,7 +40,7 @@ public class UpdateListener implements Runnable {
                 
                 data = dgp.getData();
                 if (data [0] == 0){
-                    clientGUI.getAllPost();
+                    clientGUI.seek();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();

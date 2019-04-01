@@ -123,7 +123,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         fc = new ForumClient();
         
         if (posts != null){
-
+            System.out.println("THERE ARE POSTS!");
             total_btns = posts.size();
            
             comments = new ArrayList<List>(); //comments = new List[total_btns];
@@ -170,20 +170,23 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         this.add(panelDerecho, BorderLayout.EAST);
         this.add(Title, BorderLayout.NORTH);
         this.add(contentPane, BorderLayout.CENTER);
-        
         this.pack();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
+        this.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == botonDe1) { // New Post
             CreatePostGUI cpg = new CreatePostGUI(current_user, this);
+            //Post cpg.getCreatedPost();
+            
             //this.setVisible(false);
-            this.dispose();
-            cpg.setVisible(true);   
-            this.repaint();
+            //this.dispose();
+            cpg.setVisible(true);
+            
+            //this.repaint();
             
         } else if (e.getSource() == botonDe2) { //Log Out
             Login l = new Login();
@@ -228,7 +231,11 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         
     }
 
+    
+    
     public List getAllPost() {
+        
+        
         ForumClient fc = new ForumClient();
         List l = null;
         l = fc.getAllPost();
@@ -236,7 +243,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
             allPosts = l;
             for (int i = 0; i < l.size(); i++) {
                 Post p = (Post) l.get(i);
-                //System.out.println("\n" + p.toString());
+                System.out.println("\n" + p.toString());
                 if (postWithImage.contains(p.getIdpost())){
                     continue;
                 }
@@ -246,6 +253,8 @@ public class ClientMainGUI extends JFrame implements ActionListener {
                 }
                 
             }
+            //ClientMainGUI cmg = new ClientMainGUI(user);
+            //this.dispose();
         } else {
             System.err.println("NULL POSTS");
         }
@@ -304,7 +313,14 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         btnactual.addActionListener(this);
         buttonsComment.add(btnactual);
         
-        //ssp1.repaint();
-        //ssp2.repaint();
+        ssp1.repaint();
+        ssp2.repaint();
+        this.repaint();
+    }
+
+    public void seek() {
+        new ClientMainGUI(current_user);
+        this.dispose();
+        
     }
 }
