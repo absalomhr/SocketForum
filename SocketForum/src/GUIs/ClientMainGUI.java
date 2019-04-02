@@ -45,7 +45,11 @@ public class ClientMainGUI extends JFrame implements ActionListener {
     private ArrayList<JLabel> messagesLabel;
     private ArrayList<JLabel> picsLabel;
     private ArrayList <JButton> buttonsComment;
-    public ClientMainGUI(String user) {
+    int x_cor, y_cor;
+    public ClientMainGUI(String user, int x_cor, int y_cor) {
+        this.x_cor = x_cor;
+        this.y_cor = y_cor;
+        this.setLocation(x_cor, y_cor);
         current_user = user;
         //JFrame this = new JFrame();
         postWithImage = new ArrayList<>();
@@ -75,7 +79,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.setLocationRelativeTo(null);
+       // this.setLocationRelativeTo(null);
 
         JLabel Title = new JLabel("Socket Forum. User: " + user);
         Title.setFont(new Font("Serif", Font.BOLD, 30));
@@ -319,7 +323,7 @@ public class ClientMainGUI extends JFrame implements ActionListener {
     }
 
     public void seek() {
-        new ClientMainGUI(current_user);
+        new ClientMainGUI(current_user, this.getLocation().x, this.getLocation().y);
         this.dispose();
         
     }

@@ -108,7 +108,7 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = userTextField.getText();
         if (!username.equals("")) {
-            ClientMainGUI c = new ClientMainGUI(username);
+            ClientMainGUI c = new ClientMainGUI(username, 0, 0);
             c.setVisible(true);
             this.dispose();
         } else {

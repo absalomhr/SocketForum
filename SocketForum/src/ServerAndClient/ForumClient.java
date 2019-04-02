@@ -21,8 +21,8 @@ public class ForumClient {
 
     private int port;
     private String host;
-   // private String clientRoute = "C:\\Users\\Carlo\\Desktop";
-   private String clientRoute = "C:\\Users\\elpat\\Documents\\ClientForum";
+    private String clientRoute = "C:\\Users\\Carlo\\Desktop\\Client2";
+   //private String clientRoute = "C:\\Users\\elpat\\Documents\\ClientForum";
     //private String clientRoute = "C:\\Users\\mike_\\Desktop";
 
     public ForumClient() {
